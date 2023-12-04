@@ -25,7 +25,7 @@ export const Add = () => {
 				body: JSON.stringify({
 					full_name: name,
 					email: email,
-					agenda_slug: "Agenda_Chris",
+					agenda_slug: "agenda_chris",
 					address: address,
 					phone: phone,
 				}),
