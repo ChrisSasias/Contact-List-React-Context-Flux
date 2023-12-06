@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
+
+
+import { useParams } from "react-router";
 import "../../styles/home.css";
 
 export const Add = () => {
@@ -6,6 +10,10 @@ export const Add = () => {
 	const [email, setEmail] = useState("");
 	const [phone, setPhone] = useState("");
 	const [address, setAddress] = useState("");
+
+	const { store, actions } = useContext(Context);
+
+	const params = useParams();
 
 	const URL_API = "https://playground.4geeks.com/apis/fake/contact/";
 
@@ -22,10 +30,11 @@ export const Add = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
+				// esto de abajo es lo que se manda 
 				body: JSON.stringify({
 					full_name: name,
 					email: email,
-					agenda_slug: "agenda_chris",
+					agenda_slug: "Agenda_Chris",
 					address: address,
 					phone: phone,
 				}),
@@ -39,15 +48,32 @@ export const Add = () => {
 				setPhone("");
 				setAddress("");
 			} else {
-				console.error("Failed to send data:", response.statusText, response.status );
+				console.error("Failed to send data:", response.statusText, response.status);
 			}
 		} catch (err) {
 			console.error("An error occurred:", err);
 		}
 	};
 
+	useEffect(() => {
+
+		if (params.id) {
+			const contact = store.contacts.find(obj => {
+				return obj.id === params.id
+			})
+			if (contact) {
+				setName(contact.name);
+				setEmail(contact.email);
+				setPhone(contact.phone);
+				setAddress(contact.address);
+			}
+
+		}
+
+	}, [])
+
 	return (
-		<div className="text-center mt-5 m-4 m-4 border-5">
+		< div className="text-center mt-5 m-4 m-4 border-5">
 			<div>
 				<h2>Add a new contact</h2>
 				<form onSubmit={handleSubmit}>

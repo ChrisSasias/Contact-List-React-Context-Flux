@@ -1,4 +1,9 @@
+
+const URL_API = "https://playground.4geeks.com/apis/fake/contact/agenda/Agenda_Chris";
 const getState = ({ getStore, getActions, setStore }) => {
+
+
+
 	return {
 		store: {
 			demo: [
@@ -12,14 +17,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+
+			contacts: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
-			loadSomeData: () => {
+			fetchContacts: async () => {
+				try {
+					const response = await fetch(URL_API);
+
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data);
+						setStore({ contacts: data });
+					}
+				} catch (error) {
+					console.error(error);
+				}
 				/**
 					fetch().then().then(data => setStore({ "foo": data.bar }))
 				*/
@@ -36,6 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 
 				//reset the global store
+
 				setStore({ demo: demo });
 			}
 		}
